@@ -6,7 +6,7 @@ import Dashboard from "./components/Dashboard.vue";
   <div>
     <img src="./assets/boryana.jpg" class="logo vue" alt="Vue logo" />
   </div>
-  <Dashboard msg="Boryana Kircheva" />
+  <Dashboard msg="Boryana" />
 </template>
 
 <style scoped>

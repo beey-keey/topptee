@@ -30,9 +30,10 @@ jobs:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
             const githubContext = context.github;
+            const github = githubContext;
             const context = githubContext.context;
 
-            githubContext.repos.createCommitStatus({
+            github.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,

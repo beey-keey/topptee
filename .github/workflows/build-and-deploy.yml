@@ -29,14 +29,13 @@ jobs:
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
-            const { context, GitHub } = require('@actions/github');
+            const { GitHub } = require('@actions/github');
             const octokit = new GitHub(process.env.GITHUB_TOKEN);
-            const githubContext = context;
 
             octokit.repos.createCommitStatus({
-              owner: githubContext.repo.owner,
-              repo: githubContext.repo.repo,
-              sha: githubContext.sha,
+              owner: github.context.repo.owner,
+              repo: github.context.repo.repo,
+              sha: github.context.sha,
               state: 'success',
               context: 'GitHub Pages Deployment',
               target_url: 'https://github.com/yourusername/yourrepository/actions/runs/' + process.env.GITHUB_RUN_ID,

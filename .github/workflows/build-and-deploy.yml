@@ -29,9 +29,9 @@ jobs:
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
-            const { GitHub, context: githubContext } = require('@actions/github');
-
+            const { context, GitHub } = require('@actions/github');
             const octokit = new GitHub(process.env.GITHUB_TOKEN);
+            const githubContext = context;
 
             octokit.repos.createCommitStatus({
               owner: githubContext.repo.owner,

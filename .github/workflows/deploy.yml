@@ -27,17 +27,6 @@ jobs:
           path: "./.github"
           ref: "refs/heads/main"
 
-      # BUILD STEP: Copy environments
-      - name: "Copy environments"
-        uses: ./.github/actions/readEnvironments
-        with:
-          APPLICATION: ""
-          COMPANY: ""
-
-      - uses: phrase/setup-cli@v1
-        with:
-          version: 2.22.0
-
       - uses: actions/setup-node@v4
         id: setup-node
         with:

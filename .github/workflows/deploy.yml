@@ -32,15 +32,6 @@ jobs:
         with:
           node-version: "20.11.x"
 
-      - name: "Generate build number"
-        id: "bump"
-        uses: ./.github/actions/bumpEnvBuildNumber
-        with:
-          TOKEN: ${{ secrets.GH_TOKEN }}
-          REPO_NAME: ${{ github.event.repository.name }}
-          ENVIRONMENT: "development"
-          VARIABLE: "BUILD_NUMBER"
-
         # BUILD STEP: NPM Install
       - name: "NPM Install"
         run: npm ci
@@ -53,7 +44,7 @@ jobs:
       # Checkout the live project so that we can kustomize.
       - uses: actions/checkout@v4
         with:
-          repository: liebherr/ldc_hau_smartmonitoring_ui_release_deploy_live
+          repository: beey-keey/topptee
           token: ${{ secrets.GH_TOKEN  }}
           path: "./liveRepoTemp"
           ref: "refs/heads/main"

@@ -50,7 +50,7 @@ jobs:
           ref: "refs/heads/main"
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: main # deploy to the main branch
           folder: build # replace 'build' with the directory containing the built site

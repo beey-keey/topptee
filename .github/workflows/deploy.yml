@@ -22,7 +22,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          repository: toptee
+          repository: beey-keey/topptee
           token: ${{ secrets.GH_TOKEN }}
           path: "./.github"
           ref: "refs/heads/main"

@@ -1,0 +1,27 @@
+name: pages-build-deployment
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies and build
+        run: |
+          npm install  # or yarn install, or any other command to install dependencies
+          npm run build  # or your build command
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: main # deploy to the main branch
+          folder: build # replace 'build' with the directory containing the built site
+          clean: true

@@ -11,7 +11,7 @@ const count = ref(0);
 <template>
   <h1>{{ msg }}</h1>
   under construction...
-  <q-btn color="white" text-color="black" label="Standard" />
+  <!-- <q-btn color="white" text-color="black" label="Standard" /> -->
 </template>
 
 <style scoped>

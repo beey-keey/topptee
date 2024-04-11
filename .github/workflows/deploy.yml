@@ -52,6 +52,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
-          branch: main # deploy to the main branch
-          folder: build # replace 'build' with the directory containing the built site
+          branch: gh-pages # deploy to the main branch
+          folder: dist # replace 'build' with the directory containing the built site
           clean: true

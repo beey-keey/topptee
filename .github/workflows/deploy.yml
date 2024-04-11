@@ -1,31 +1,70 @@
-name: GitHub Pages Deployment
+name: "on_push_main"
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main # Adjust if your main branch has a different name
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  id-token: write
+  contents: write
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
+  main:
+    runs-on: [self-hosted, cloud, linux, docker, size-xl]
+    environment: development
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
         with:
-          node-version: "14" # Adjust as needed
+          repository: toptee
+          token: ${{ secrets.GH_TOKEN }}
+          path: "./.github"
+          ref: "refs/heads/main"
 
-      - name: Install dependencies
-        run: npm install # Or any other commands to install dependencies
-
-      - name: Build site
-        run: npm run build # Or any other build commands
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      # BUILD STEP: Copy environments
+      - name: "Copy environments"
+        uses: ./.github/actions/readEnvironments
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
-          publish_dir: ./build # Adjust the directory where your built site is located
+          APPLICATION: ""
+          COMPANY: ""
+
+      - uses: phrase/setup-cli@v1
+        with:
+          version: 2.22.0
+
+      - uses: actions/setup-node@v4
+        id: setup-node
+        with:
+          node-version: "20.11.x"
+
+      - name: "Generate build number"
+        id: "bump"
+        uses: ./.github/actions/bumpEnvBuildNumber
+        with:
+          TOKEN: ${{ secrets.GH_TOKEN }}
+          REPO_NAME: ${{ github.event.repository.name }}
+          ENVIRONMENT: "development"
+          VARIABLE: "BUILD_NUMBER"
+
+        # BUILD STEP: NPM Install
+      - name: "NPM Install"
+        run: npm ci
+
+        # BUILD STEP: Build with Vite
+      - name: "Vite build"
+        run: node --max_old_space_size=4096 ${{ github.workspace }}/node_modules/.bin/vite build --mode development
+
+      # BUILD STEP: Notify Argo about the new image
+      # Checkout the live project so that we can kustomize.
+      - uses: actions/checkout@v4
+        with:
+          repository: liebherr/ldc_hau_smartmonitoring_ui_release_deploy_live
+          token: ${{ secrets.GH_TOKEN  }}
+          path: "./liveRepoTemp"
+          ref: "refs/heads/main"
